@@ -17,7 +17,14 @@ export default {
   background-color: var(--color-tint);
   text-align: center;
   color: white;
-  box-shadow: 0px 1px 1px rgba(100, 100, 100, 0.1)
+  box-shadow: 0px 1px 1px rgba(100, 100, 100, 0.1);
+
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:9;
+  
 }
 .nav-bar-item{
   flex:1;

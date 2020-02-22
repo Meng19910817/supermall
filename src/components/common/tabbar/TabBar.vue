@@ -42,7 +42,7 @@ export default {
    height: 49px;
    background-color:#f6f6f6;
    box-shadow:0px -3px 3px rgba(100, 100, 100, 0.1);
-   /* height: 49px; */
+   z-index:9;
 
   }
   

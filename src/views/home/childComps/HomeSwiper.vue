@@ -28,5 +28,7 @@ export default {
 }
 </script>
 <style scoped>
-
+#home-swiper{
+  padding-top: 44px;
+}
 </style>

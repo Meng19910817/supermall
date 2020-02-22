@@ -23,8 +23,8 @@
     </tab-bar>
 </template>
 <script>
-import TabBar from "../tabbar/TabBar"
-import TabBarItem from "../tabbar/TabBarItem"
+import TabBar from "common/tabbar/TabBar"
+import TabBarItem from "common/tabbar/TabBarItem"
 export default {
   name:"MainTabBar",
   components:{
