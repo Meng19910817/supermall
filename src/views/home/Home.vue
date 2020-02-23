@@ -2,23 +2,14 @@
   <div id="home">
     <div>
       <nav-bar><div slot="center">购物中心</div></nav-bar>
-      <home-swiper :banners="banners"/>
-      <home-recommend :recommends="recommends"/>
-      <home-image></home-image>
-      <tab-control class="tab-control" :titles="['流行','最新','精选']"/>
-      <goods-list :goods="goods['pop'].list"></goods-list>
-      <ul>
-        <li>列表1</li>
-        <li>列表2</li>
-        <li>列表3</li>
-        <li>列表4</li>
-        <li>列表5</li>
-        <li>列表6</li>
-        <li>列表7</li>
-        <li>列表8</li>
-        <li>列表9</li>
-        <li>列表10</li> 
-      </ul>
+      <scroll class="scroll" ref="scroll" :probeType="3" @scroll="showArrow" @pullingUp="showMore">
+        <home-swiper :banners="banners"/>
+        <home-recommend :recommends="recommends"/>
+        <home-image></home-image>
+        <tab-control class="tab-control" :titles="['流行','最新','精选']" @tabcontrolClick="tabcontrolClick"/>
+        <goods-list :goods="goods[currentType].list"></goods-list>
+      </scroll>
+      <backtop @click.native="backtopClick" class="back-top" v-show="isShow"/>
       
     </div>
   </div>
@@ -30,6 +21,9 @@ import HomeRecommend from "views/home/childComps/HomeRecommend"
 import HomeImage from "views/home/childComps/HomeImage"
 import TabControl from "content/tabcontrol/TabControl"
 import GoodsList from "common/goodslist/GoodsList"
+import Scroll from "common/betterscroll/Scroll"
+import Backtop from "common/backtop/Backtop"
+
 
 import {getHomeMutidata, getGoodsList} from "network/home/index.js"
 
@@ -41,7 +35,9 @@ export default {
     HomeRecommend,
     HomeImage,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll,
+    Backtop
   },
   data(){
     return {
@@ -51,7 +47,9 @@ export default {
         "pop":{page:0, list:[]},
         "new":{page:0, list:[]},
         "sell":{page:0, list:[]}
-      }
+      },
+      isShow:false,
+      currentType:'pop'
     }
   },
   created(){
@@ -60,8 +58,8 @@ export default {
 
     //get goodslist
     this.getGoodsList('pop')  
-    // this.getGoodsList('new') 
-    // this.getGoodsList('sell')  
+    this.getGoodsList('new') 
+    this.getGoodsList('sell')  
   },
   methods:{
     getHomeMutidata(){
@@ -72,12 +70,32 @@ export default {
     },
     getGoodsList(type){
       let page = this.goods[type].page + 1
-      // console.log(page)
       getGoodsList(type, page).then(res=>{
         this.goods[type].list = res.data.data.list
-        //console.log(res.data.data.list)
         page++
       })
+    },
+    showArrow(position){
+      this.isShow = (-position.y) > 1000
+    },
+    backtopClick(){
+      this.$refs.scroll.backToTop(0, 0, 500)
+    },
+    showMore(){
+      
+    },
+    tabcontrolClick(currentIndex){
+      console.log(currentIndex)
+      switch(currentIndex){
+        case 0:
+          this.currentType = 'pop'
+          break
+        case 1:
+          this.currentType = 'new'
+          break
+        case 2:
+          this.currentType = 'sell'
+      }
     }
      
   }
@@ -90,5 +108,8 @@ export default {
   top:44px;
   background-color: #fff;
   z-index:9;
+}
+.scroll{
+  height: 100vh;
 }
 </style>
